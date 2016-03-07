@@ -71,6 +71,100 @@ function search(){
 			}
 	);
 }
+
+//Next Page function 
+function nextPage(){
+
+	var token = $('#next-button').data('token'); 
+	var q = $('#next-button').data('query'); 
+
+	// clear Results 
+	$('#results').html('');
+	$('#buttons').html('');
+
+	//Get Form Input
+	q = $('#query').val();
+
+	//Run GET Request to API
+	$.get(
+		"https://www.googleapis.com/youtube/v3/search", {
+			part: 'snippet, id', 
+			q: q, 
+			pageToken: token, 
+			type: 'video',
+			key: 'AIzaSyB3eTAp-iwUm-pJ7NjwhT6VDmdE8XXhQVs'},
+			
+			function(data){
+				var nextPageToken = data.nextPageToken; 
+				var prevPageToken = data.prevPageToken;
+				
+				//Log Data
+				console.log(data);
+
+				$.each(data.items, function(i, item){
+					
+					// Get output
+					var output = getOutput(item);
+
+					// Display Results
+					$('#results').append(output);	
+				});
+
+				var buttons = getButtons(prevPageToken, nextPageToken); 
+
+				//Display Buttons
+				$('#buttons').append(buttons); 
+			}
+	);
+}
+
+// Previous Page Function 
+function prevPage(){
+	var token = $('#prev-button').data('token'); 
+	var q = $('#prev-button').data('query'); 
+
+	// clear Results 
+	$('#results').html('');
+	$('#buttons').html('');
+
+	//Get Form Input
+	q = $('#query').val();
+
+	//Run GET Request to API
+	$.get(
+		"https://www.googleapis.com/youtube/v3/search", {
+			part: 'snippet, id', 
+			q: q, 
+			pageToken: token, 
+			type: 'video',
+			key: 'AIzaSyB3eTAp-iwUm-pJ7NjwhT6VDmdE8XXhQVs'},
+			
+			function(data){
+				var nextPageToken = data.nextPageToken; 
+				var prevPageToken = data.prevPageToken;
+				
+				//Log Data
+				console.log(data);
+
+				$.each(data.items, function(i, item){
+					
+					// Get output
+					var output = getOutput(item);
+
+					// Display Results
+					$('#results').append(output);	
+				});
+
+				var buttons = getButtons(prevPageToken, nextPageToken); 
+
+				//Display Buttons
+				$('#buttons').append(buttons); 
+			}
+	);
+}
+
+
+
 // Build Output 
 function getOutput(item){
 	var videoId = item.id.videoId; 
@@ -106,7 +200,7 @@ function getButtons(prevPageToken, nextPageToken){
 	}else {
 
 		var btnoutput = '<div class="button-container">' +
-		'<button id="next-button" class="paging-button" data-token="'+prevPageToken+'" data-query="'+q+'"'+
+		'<button id="prev-button" class="paging-button" data-token="'+prevPageToken+'" data-query="'+q+'"'+
 		'onclick="prevPage();">Prev Page</button>' + 
 		'<button id="next-button" class="paging-button" data-token="'+nextPageToken+'" data-query="'+q+'"'+
 		'onclick="nextPage();">Next Page</button></div>'; 	
