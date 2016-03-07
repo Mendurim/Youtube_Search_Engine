@@ -9,7 +9,7 @@
 == Things will get through: 
 * jQuery  ```animate()``` method
 * Youtube Data API v3
-* GET Request using ```$.get()
+* GET Request using ```$.get()```
 * Insert the result into HTML
 * API Page Tokens 
 * FancyBox jQuery Plugin
